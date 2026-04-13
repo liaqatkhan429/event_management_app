@@ -1,25 +1,73 @@
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:google_fonts/google_fonts.dart';
+
+
+class AppButton extends StatelessWidget {
+  final String txt;
+  final double height;
+  final double width;
+  final VoidCallback? onPress;
+  final Color? color;
+
+  const AppButton({
+    super.key,
+    required this.txt,
+    required this.width,
+    required this.height,
+    required this.onPress,
+    this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: height,
+      width: width,
+      child: ElevatedButton(
+        onPressed: onPress,
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: color ?? const Color(0xFFCF3232), // 👈 default
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          elevation: 0,
+        ),
+        child: Text(
+          txt,
+          style: GoogleFonts.raleway(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 const Color buttonColor = Color(0xFFCF3232);
 const Color textColor1 = Color(0xFF727272);
-const Color blackColor = Color(0xFF1F1F1F);
 
 /// custom text
 Widget customText(
-  String text, {
-  double fontSize = 16,
-  FontWeight fontWeight = FontWeight.normal,
-  Color color = Colors.black,
-  TextStyle? style,
+    String text, {
+      double fontSize = 16,
+      FontWeight fontWeight = FontWeight.normal,
+      Color color = Colors.black,
+      TextStyle? style,
       double spacing = 0,
-}
-) {
+    }
+    ) {
   return Text(
     text,
     textAlign: TextAlign.center,
     style:
-        style ??
+    style ??
         GoogleFonts.poppins(
           fontSize: fontSize,
           fontWeight: fontWeight,
@@ -41,8 +89,6 @@ Widget customButton({
   Color txtColor = Colors.white,
   TextStyle? style,
   double spacing = 0,
-  Color borderColor = Colors.transparent,
-
 
 }) {
   return Container(
@@ -51,7 +97,6 @@ Widget customButton({
     decoration: BoxDecoration(
       color: color,
       borderRadius: BorderRadius.circular(8),
-      border: Border.all(color: borderColor)
     ),
     child: Center(
       child: Text(
@@ -66,36 +111,6 @@ Widget customButton({
               letterSpacing: spacing,
             ),
       ),
-    ),
-  );
-}
-
-
-//// custom button
-Widget customButton2({
-
-  double height = 56,
-  double width = double.infinity,
-  Color color = buttonColor,
-  Color borderColor = Colors.transparent,
-  VoidCallback? onPressed,
-  required Widget child,
-
-}) {
-  return Container(
-    height: height,
-    width: width,
-    decoration: BoxDecoration(
-      color: color,
-      borderRadius: BorderRadius.circular(8),
-      border: Border.all(
-          color: borderColor,
-        width: 0.6,
-
-      )
-    ),
-    child: Center(
-      child: child,
     ),
   );
 }
