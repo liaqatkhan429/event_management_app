@@ -38,7 +38,7 @@ body: Padding(
             ),
             const SizedBox(width: 10),
             customText(
-              "Business Group",
+              "Create Event",
               fontWeight: FontWeight.w600,
               fontSize: 18,
             ),
@@ -205,7 +205,7 @@ body: Padding(
             ),
             const SizedBox(height: 6),
             TextField(
-              maxLines: 5,
+              maxLines: 4,
               decoration: InputDecoration(
                 hintText: "Lorem ipsum dolor sit amet consectetur. Lectus viverra fermentum natoque nibh enim aliquam tincidunt eu purus. Non habitasse sed feugiat aliquet tortor. Risus turpis quam est quam leo turpis ipsum. Amet non sed lacus placerat turpis in. Vitae amet sit sed dictum eget scelerisque massa nibh.",
                 hintStyle: GoogleFonts.poppins(
