@@ -1,3 +1,4 @@
+import 'package:event_management_app/views/group_profile_screen.dart';
 import 'package:event_management_app/views/utils/appbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,7 +29,11 @@ appBar: AppBar(
         backgroundImage: AssetImage("assets/user.png"),
       ),
       const SizedBox(width: 10),
-      customText("Business Group", fontWeight: FontWeight.w600, fontSize: 18,  color: Colors.white),
+      InkWell(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => GroupProfileScreen()));
+          },
+          child: customText("Business Group", fontWeight: FontWeight.w600, fontSize: 18,  color: Colors.white)),
       const Spacer(),
       Icon(Icons.more_vert, color: Colors.white)
     ],

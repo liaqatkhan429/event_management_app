@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 class NotificationScreen extends StatelessWidget {
@@ -39,7 +37,7 @@ class NotificationScreen extends StatelessWidget {
                 // 1. Thumbnail Image
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.asset('assets/images/notification.png',
+                  child: Image.asset('assets/notification.png',
                     width: 60,
                     height: 60,
                     fit: BoxFit.cover,
