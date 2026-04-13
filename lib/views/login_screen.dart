@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
 
                 const SizedBox(height: 33),
-                AppButton(txt: "Login", width: 392, height: 56, onPress: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen()));}),
+                AppButton(txt: "Login", width: 392, height: 56, onPress: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavigationScreen()));}),
               const  SizedBox(height: 30),
                 Align(
                   alignment: Alignment.center,

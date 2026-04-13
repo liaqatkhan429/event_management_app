@@ -1,6 +1,7 @@
 
 
 
+import 'package:event_management_app/views/admin_community_screen.dart';
 import 'package:event_management_app/views/community_screen.dart';
 import 'package:event_management_app/views/home_screen.dart';
 import 'package:event_management_app/views/profile.dart';
@@ -9,22 +10,22 @@ import 'package:google_fonts/google_fonts.dart';
 import 'Features.dart';
 import 'favoruite_screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class BottomNavigationScreen extends StatefulWidget {
+  const BottomNavigationScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<BottomNavigationScreen> createState() => _BottomNavigationScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   int selectedIndex = 0;
 
   final List<Widget> screenList = [
-    const HomeScreen(),                // Index 0: Home
-    const Features(), // Index 1: Features
-    const CommunityScreen(),// Index 2: Community
-    const FavoritesScreen(),               // Index 3: Favorite
-    const ProfileScreen(),                 // Index 4: Settings
+    const HomeScreen(),
+    const Features(),
+    const AdminCommunityScreen(),
+    const FavoritesScreen(),
+    const ProfileScreen(),
   ];
 
   @override

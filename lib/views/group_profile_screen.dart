@@ -33,11 +33,16 @@ body: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
-                  Image.asset(
-                    "assets/backarrow.png",
-                    height: 24,
-                    width: 24,
-                    color: Colors.white,
+                  InkWell(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Image.asset(
+                      "assets/backarrow.png",
+                      height: 24,
+                      width: 24,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   customText(

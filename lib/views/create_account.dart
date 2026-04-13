@@ -193,7 +193,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 ),
                 const SizedBox(height: 14,),
 
-                AppButton(txt: "Continue", width: 392, height: 56, onPress: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen()));}),
+                AppButton(txt: "Continue", width: 392, height: 56, onPress: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavigationScreen()));}),
                 const  SizedBox(height: 30),
                 Align(
                   alignment: Alignment.center,
