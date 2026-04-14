@@ -80,7 +80,7 @@ body: SingleChildScrollView(
               width: 94,
               decoration: BoxDecoration(
                shape: BoxShape.circle,
-                image: DecorationImage(image: AssetImage("assets/notification.png"),fit: BoxFit.contain)
+                image: DecorationImage(image: AssetImage("assets/home2.png"),fit: BoxFit.contain)
               ),
   
             ),

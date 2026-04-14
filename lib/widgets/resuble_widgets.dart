@@ -74,6 +74,7 @@ Widget customButton({
 //// custom button
 Widget customButton2({
 
+  double radius = 8,
   double height = 56,
   double width = double.infinity,
   Color color = buttonColor,
@@ -87,7 +88,7 @@ Widget customButton2({
     width: width,
     decoration: BoxDecoration(
       color: color,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(radius),
       border: Border.all(
           color: borderColor,
         width: 0.6,

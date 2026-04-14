@@ -34,8 +34,8 @@ class _CreateAccountState extends State<CreateAccount> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25),
           child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
+
               children: [
                 const SizedBox(height: 30,),
                 Row(
@@ -67,12 +67,15 @@ class _CreateAccountState extends State<CreateAccount> {
                 ),
 
                 const SizedBox(height: 82),
-                customText(
-                  "Gmail",
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: customText(
+                    "Gmail",
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
 
+                  ),
                 ),
 
                 const SizedBox(height: 6),
@@ -102,16 +105,19 @@ class _CreateAccountState extends State<CreateAccount> {
 
 
                 SizedBox(height: 16),
-                customText(
-                  "password",
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: customText(
+                    "Password",
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
 
+                  ),
                 ),
                 const SizedBox(height: 6),
                 TextField(
-                  obscureText: _obscureText, // Hide/show password
+                  obscureText: _obscurePassword, // Hide/show password
                   decoration: InputDecoration(
                     hintText: "Password",
                     hintStyle: GoogleFonts.poppins(
@@ -148,18 +154,21 @@ class _CreateAccountState extends State<CreateAccount> {
 
 
                 SizedBox(height: 16),
-                customText(
-                  "Confirm Password",
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: customText(
+                    "Confirm Password",
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
 
+                  ),
                 ),
                 const SizedBox(height: 6),
                 TextField(
-                  obscureText: _obscureText, // Hide/show password
+                  obscureText: _obscureConfirmPassword, // Hide/show password
                   decoration: InputDecoration(
-                    hintText: "Password",
+                    hintText: "Confirm Password",
                     hintStyle: GoogleFonts.poppins(
                         fontSize: 14,fontWeight: FontWeight.w400,color: Color(0xff505050)
                     ),
@@ -226,12 +235,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CreateAccount(),
-                          ),
-                        );
+                        Navigator.pop(context);
                       },
                       child: Text(
                         "Login",

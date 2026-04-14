@@ -36,7 +36,7 @@ body: SingleChildScrollView(
   
         ],
       ),
-      const SizedBox(height: 24,),
+      const SizedBox(height: 14,),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -80,7 +80,7 @@ body: SingleChildScrollView(
                 ),
               ),
             ),
-            const SizedBox(height: 40,),
+            const SizedBox(height: 20,),
             customButton(text: 'Add to my calendar'),
             const SizedBox(height: 20,),
   

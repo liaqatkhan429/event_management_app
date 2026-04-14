@@ -19,25 +19,23 @@ class NotificationScreen extends StatelessWidget {
       ),
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        itemCount: 8, // Matching the number of items in your image
+        itemCount: 8,
         itemBuilder: (context, index) {
-          // In a real app, 'isRead' would come from your data model
           bool isRead = index > 2;
 
           return Container(
             margin: const EdgeInsets.only(bottom: 12),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.grey[100], // Subtle grey background
+              color: Colors.grey[100],
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 1. Thumbnail Image
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.asset('assets/notification.png',
+                  child: Image.asset('assets/home2.png',
                     width: 60,
                     height: 60,
                     fit: BoxFit.cover,

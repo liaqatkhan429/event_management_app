@@ -16,7 +16,7 @@ class FavoritesScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 62,),
                   customText(
-                    "Features",
+                    "Favorite",
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
@@ -66,7 +66,7 @@ class FavoritesScreen extends StatelessWidget {
                                       Positioned(
                                         top: 12,
                                         right: 12,
-                                        child: Image.asset("assets/fivorite.png", height: 24,width: 24,color: Colors.white,),
+                                        child: Icon(Icons.favorite, color: Colors.red,)
                                       ),
                                     ],
                                   ),

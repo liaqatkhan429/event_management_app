@@ -84,6 +84,13 @@ class _CustomCalendarState extends State<CustomCalendar> {
           sixWeekMonthsEnforced: true,
 
           headerVisible: false,
+          onPageChanged: (focusedDay) {
+            setState(() {
+              _focusedDay = focusedDay;
+            });
+          },
+          
+
           daysOfWeekStyle: DaysOfWeekStyle(
             weekdayStyle: GoogleFonts.poppins(
               fontSize: 14,

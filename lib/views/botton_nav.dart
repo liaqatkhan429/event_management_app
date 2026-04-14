@@ -4,10 +4,10 @@
 import 'package:event_management_app/views/admin_community_screen.dart';
 import 'package:event_management_app/views/community_screen.dart';
 import 'package:event_management_app/views/home_screen.dart';
-import 'package:event_management_app/views/profile.dart';
+import 'package:event_management_app/views/sitting.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'Features.dart';
+import 'features.dart';
 import 'favoruite_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
@@ -25,7 +25,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     const Features(),
     const AdminCommunityScreen(),
     const FavoritesScreen(),
-    const ProfileScreen(),
+    const SettingScreen(),
   ];
 
   @override
