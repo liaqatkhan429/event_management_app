@@ -37,6 +37,12 @@ dependencies:
   google_fonts: ^8.0.2
   smooth_page_indicator: ^2.0.1
   table_calendar: ^3.0.9
+  provider: ^6.1.5+1
+  firebase_core: ^4.7.0
+  cloud_firestore: ^6.3.0
+  firebase_auth: ^6.4.0
+  image_picker: ^1.2.1
+  http: ^1.6.0
 
 
 dev_dependencies:

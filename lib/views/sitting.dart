@@ -4,8 +4,10 @@ import 'package:event_management_app/views/utils/appbutton.dart';
 import 'package:event_management_app/widgets/resuble_widgets.dart' hide customText, buttonColor;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../model/sitting.dart';
+import '../provider/theme.dart';
 import 'notification_screen.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -104,6 +106,9 @@ class _SettingScreenState extends State<SettingScreen> {
                             onTap: (){
                               if(i == 0){
                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>NotificationScreen()));
+                              }
+                              if(i == 5){
+                               Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
                               }
                             },
                             child: Row(

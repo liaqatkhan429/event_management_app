@@ -1,9 +1,13 @@
 
+import 'package:event_management_app/provider/user.dart';
 import 'package:event_management_app/views/utils/appbutton.dart';
 import 'package:event_management_app/widgets/resuble_widgets.dart' hide customText;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
+import '../services/auth.dart';
+import '../services/user.dart';
 import 'botton_nav.dart';
 import 'create_account.dart';
 
@@ -15,10 +19,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   bool _obscureText = true;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -76,6 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 6),
               TextField(
+                controller: emailController,
                 decoration: InputDecoration(
                   hintText: "Example123@gmail.com",
                   hintStyle: GoogleFonts.poppins(
@@ -115,7 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
               TextField(
-                obscureText: _obscureText, // Hide/show password
+                controller: passwordController,
+                obscureText: _obscureText,
                 decoration: InputDecoration(
                   hintText: "Password",
                   hintStyle: GoogleFonts.poppins(
@@ -169,7 +180,46 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
 
               const SizedBox(height: 33),
-              AppButton(txt: "Login", width: 392, height: 56, onPress: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavigationScreen()));}),
+               InkWell(
+                 onTap: () async{
+                   if(emailController.text.isEmpty || passwordController.text.isEmpty){
+                     showSnackBar(context, "Fill all fields");
+                     return ;
+                   }
+                   try {
+                     isLoading = true;
+                     setState(() {});
+                     await AuthServices()
+                         .signIn(
+                       email: emailController.text,
+                       password: passwordController.text,
+                     )
+                         .then((val) async{
+                       isLoading = false;
+                       setState(() {});
+                       await UserServices().getUserProfile(val.uid).then((userData){
+                         userProvider.setUser(userData);
+                         Navigator.push(context, MaterialPageRoute(builder: (context) => BottomNavigationScreen()));
+                       });
+                     });
+                   }
+                   catch (e) {
+                     isLoading = false;
+                     setState(() {});
+                     showSnackBar(context, e.toString());
+                   }
+
+                 },
+                 child: customButton2(
+                    width: 392, height: 56,
+                    child: isLoading
+                        ? CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 0.8,
+                    )
+                        : customText("Login", color: Colors.white)
+                               ),
+               ),
             const  SizedBox(height: 30),
               Align(
                 alignment: Alignment.center,

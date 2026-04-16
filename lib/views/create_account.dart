@@ -1,10 +1,9 @@
-
-import 'package:event_management_app/views/utils/appbutton.dart' hide customText;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import '../model/user.dart';
+import '../services/auth.dart';
+import '../services/user.dart';
 import '../widgets/resuble_widgets.dart';
-import 'botton_nav.dart';
 import 'login_screen.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -15,9 +14,12 @@ class CreateAccount extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  bool _obscureText = true;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +82,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
                 const SizedBox(height: 6),
                 TextField(
+                  controller: emailController,
                   decoration: InputDecoration(
                     hintText: "Example123@gmail.com",
                     hintStyle: GoogleFonts.poppins(
@@ -117,6 +120,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 ),
                 const SizedBox(height: 6),
                 TextField(
+                  controller: passwordController,
                   obscureText: _obscurePassword, // Hide/show password
                   decoration: InputDecoration(
                     hintText: "Password",
@@ -139,13 +143,13 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscureText ? Icons.visibility_off : Icons.visibility,
+                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
                         color: Colors.grey,
                       ),
                       onPressed: () {
                         setState(() {
-                          _obscureText =
-                          !_obscureText; // Toggle password visibility
+                          _obscurePassword =
+                          !_obscurePassword; // Toggle password visibility
                         });
                       },
                     ),
@@ -166,6 +170,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 ),
                 const SizedBox(height: 6),
                 TextField(
+                  controller: confirmPasswordController,
                   obscureText: _obscureConfirmPassword, // Hide/show password
                   decoration: InputDecoration(
                     hintText: "Confirm Password",
@@ -188,13 +193,13 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscureText ? Icons.visibility_off : Icons.visibility,
+                        _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
                         color: Colors.grey,
                       ),
                       onPressed: () {
                         setState(() {
-                          _obscureText =
-                          !_obscureText; // Toggle password visibility
+                          _obscureConfirmPassword =
+                          !_obscureConfirmPassword; // Toggle password visibility
                         });
                       },
                     ),
@@ -202,7 +207,54 @@ class _CreateAccountState extends State<CreateAccount> {
                 ),
                 const SizedBox(height: 14,),
 
-                AppButton(txt: "Continue", width: 392, height: 56, onPress: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavigationScreen()));}),
+               InkWell(
+                  onTap: () async{
+                    if(emailController.text.isEmpty || passwordController.text.isEmpty || confirmPasswordController.text.isEmpty){
+                      showSnackBar(context, "Fill all fields");
+                      return ;
+                    }
+                    if(confirmPasswordController.text != passwordController.text){
+                      showSnackBar(context, "Password is not matching");
+                      return;
+                    }
+
+                    try{
+                      isLoading = true;
+                      setState(() {});
+                      await AuthServices().signUp(
+                          email: emailController.text,
+                          password: passwordController.text
+                      ).then((val) {
+                        UserServices().createUser(
+                            UserModel(
+                              docId: val.uid,
+                              email: emailController.text,
+
+                            )
+                        ).then((val){
+                          isLoading = false;
+                          setState(() {});
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                        });
+                      });
+                    }
+                    catch(e){
+                      isLoading = false;
+                      setState(() {});
+                      showSnackBar(context, e.toString());
+                    }
+                  },
+                  child: customButton2(
+                   width: 392,
+                   height: 56,
+                   child: isLoading
+                       ? CircularProgressIndicator(
+                     color: Colors.white,
+                     strokeWidth: 0.8,
+                   )
+                       : customText("Continue", color: Colors.white)
+                  ),
+                ),
                 const  SizedBox(height: 30),
                 Align(
                   alignment: Alignment.center,
@@ -219,7 +271,8 @@ class _CreateAccountState extends State<CreateAccount> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Image.asset("assets/google.png",height: 36,width: 36),
-                        customText("Continue with google", fontWeight: FontWeight.w500,fontSize: 14, color: Color(0xff505050))
+                        customText("Continue with google", fontWeight: FontWeight.w500,fontSize: 14, color: Color(0xff505050),
+                        )
                       ],
                     )),
                 SizedBox(height: 62),

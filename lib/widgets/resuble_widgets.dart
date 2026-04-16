@@ -100,3 +100,40 @@ Widget customButton2({
     ),
   );
 }
+
+void showSnackBar(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      margin: EdgeInsets.only(
+        top: MediaQuery.of(context).padding.top + 20,
+      ),
+      content: Center(
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 10,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.black87,
+            borderRadius: BorderRadius.circular(25),
+          ),
+          child: Text(
+            message,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.raleway(
+              fontWeight: FontWeight.w600,
+              fontSize: 13,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+
