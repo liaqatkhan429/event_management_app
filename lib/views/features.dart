@@ -1,7 +1,10 @@
+import 'package:event_management_app/services/event.dart';
 import 'package:event_management_app/views/event_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
+import '../model/event.dart';
 import '../widgets/resuble_widgets.dart';
 import 'home_screen.dart';
 
@@ -21,6 +24,8 @@ class _FeaturesState extends State<Features> {
         child: Column(
           children: [
             const SizedBox(height: 62,),
+
+            //// header
             Row(
               children: [
                 customText(
@@ -328,106 +333,114 @@ class _FeaturesState extends State<Features> {
             ),
 
             Expanded(
-              child: ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, i){
-                return Column(
-                  children: [
-                    InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>EventScreen()));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                                color: Color(0xffBABABA)
-                            )
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+              child: StreamProvider.value(
+                  value: EventServices().getEvents(),
+                  initialData: [EventModel()],
+                builder: (context, child){
+                    List<EventModel> eventList = context.watch<List<EventModel>>();
+                    return ListView.builder(
+                        itemCount: eventList.length,
+                        itemBuilder: (context, i){
+                          return Column(
                             children: [
-                              // Image with overlay & heart icon
-                              Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Image.asset(
-                                      "assets/f.png",
-                                      height: 180,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
+                              InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>EventScreen()));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                          color: Color(0xffBABABA)
+                                      )
                                   ),
-                                  Container(
-                                    height: 180,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      gradient: LinearGradient(
-                                        colors: [Colors.black.withValues(alpha: 0.1), Colors.transparent],
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 12,
-                                    right: 12,
-                                    child: Image.asset("assets/fivorite.png", height: 24,width: 24,color: Colors.white,),
-                                  ),
-                                ],
-                              ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius: BorderRadius.circular(20),
+                                              child: Image.network(
+                                                eventList[i].image.toString(),
+                                                height: 180,
+                                                width: double.infinity,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            Container(
+                                              height: 180,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(20),
+                                                gradient: LinearGradient(
+                                                  colors: [Colors.black.withValues(alpha: 0.1), Colors.transparent],
+                                                  begin: Alignment.bottomCenter,
+                                                  end: Alignment.topCenter,
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 12,
+                                              right: 12,
+                                              child: Image.asset("assets/fivorite.png", height: 24,width: 24,color: Colors.white,),
+                                            ),
+                                          ],
+                                        ),
 
-                              // Event details
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Made in Melanin! Black History Month Social...',
-                                      style: GoogleFonts.poppins(fontSize: 15.8, fontWeight: FontWeight.w600),
-                                    ),
-                                    const SizedBox(height: 12),
-                                    Row(
-                                      children:  [
-                                        Icon(Icons.calendar_today_outlined, size: 15, ),
-                                        SizedBox(width: 8),
-                                        customText(
-                                            '28 October 2025 6:00pm GMT',
-                                            fontSize: 14, fontWeight: FontWeight.w400),
+                                        // Event details
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 10),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                          eventList[i].title.toString(),
+                                                style: GoogleFonts.poppins(fontSize: 15.8, fontWeight: FontWeight.w600),
+                                              ),
+                                              const SizedBox(height: 12),
+                                              Row(
+                                                children:  [
+                                                  Icon(Icons.calendar_today_outlined, size: 15, ),
+                                                  SizedBox(width: 8),
+                                                  customText(
+                                                      eventList[i].date.toString(),
+                                                      fontSize: 14, fontWeight: FontWeight.w400),
+                                                  customText(
+                                                      eventList[i].time.toString(),
+                                                      fontSize: 14, fontWeight: FontWeight.w400),
 
+                                                ],
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Row(
+                                                children:  [
+                                                  Icon(Icons.location_on_outlined, size: 18, ),
+                                                  SizedBox(width: 8),
+                                                  customText(
+                                                      eventList[i].location.toString(),
+                                                      fontSize: 14, fontWeight: FontWeight.w400),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 20),
+                                              customButton(text: "Add to my calendar")
+                                            ],
+                                          ),
+                                        )
                                       ],
                                     ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children:  [
-                                        Icon(Icons.location_on_outlined, size: 18, ),
-                                        SizedBox(width: 8),
-                                        customText(
-                                            '1901 Thornridge Cir. Shiloh, Hawaii 81063',
-                                            fontSize: 14, fontWeight: FontWeight.w400),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 20),
-                                    customButton(text: "Add to my calendar")
-                                  ],
+                                  ),
                                 ),
-                              )
+                              ),
+                              const SizedBox(height: 24,),
                             ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24,),
-                  ],
-                );
-              }),
+                          );
+                        });
+                },
             ),
-          ],
+            )],
         ),
       )
     );
