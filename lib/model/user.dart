@@ -31,11 +31,14 @@ class UserModel {
     profileImage: json["profileImage"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "docId": docId,
-    "userName": userName,
-    "email": email,
-    "password": password,
-    "profileImage": profileImage,
-  };
+  Map<String, dynamic> toJson() {
+  final data = <String, dynamic>{};
+
+  if (docId != null) data["docId"] = docId;
+  if (userName != null && userName!.isNotEmpty) data["userName"] = userName;
+  if (email != null && email!.isNotEmpty) data["email"] = email;
+  if (password != null) data["password"] = password;
+  if (profileImage != null) data["profileImage"] = profileImage;
+  return data;
+  }
 }

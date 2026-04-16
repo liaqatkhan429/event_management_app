@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../model/user.dart';
@@ -21,7 +22,6 @@ class UpdateProfileScreen extends StatefulWidget {
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
   bool isLoading = false;
 
   String? profileImageUrl;
@@ -31,6 +31,17 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final ImagePickerService _imagePicker = ImagePickerService();
 
   String userId = FirebaseAuth.instance.currentUser!.uid;
+  @override
+  void initState() {
+    // TODO: implement initState
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    nameController = TextEditingController(
+      text: userProvider.getUser().userName.toString(),
+    );
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var userProvider = Provider.of<UserProvider>(context);
@@ -63,10 +74,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             Center(
               child: Stack(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 60,
                     backgroundImage: NetworkImage(
-                      'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=400',
+                      userProvider.getUser().profileImage.toString()
                     ),
                   ),
                   Positioned(
@@ -112,48 +123,69 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             const SizedBox(height: 12),
 
             // Text Input Field
-            TextFormField(
-              initialValue: 'Mack_tor',
+            TextField(
+              controller: nameController,
+
               decoration: InputDecoration(
+                hintText: "Name",
+                hintStyle: GoogleFonts.poppins(
+                    fontSize: 14,fontWeight: FontWeight.w400,color: Color(0xff505050)
+                ),
                 filled: true,
-                fillColor: Colors.grey[50],
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                fillColor: Colors.white,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Colors.grey),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Colors.black12),
                 ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Colors.black),
+                ),
+
               ),
             ),
 
             const SizedBox(height: 30),
 
             // Save Changes Button
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFD32F2F), // Matches the red in image
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 0,
-                ),
-                child: const Text(
-                  'Save Changes',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
+            InkWell(
+                onTap: ()async {
+                  try {
+                    setState(() => isLoading = true);
+
+                    await UserServices().mergeData(
+                      UserModel(
+                        docId: userProvider.getUser().docId!,
+                        userName: nameController.text.trim(),
+                      ),
+                    );
+
+                    UserModel updatedUser = await UserServices()
+                        .getUserProfile(userProvider.getUser().docId!);
+
+                    userProvider.setUser(updatedUser);
+
+
+                    showSnackBar(context, "Profile Updated Successfully");
+                    Navigator.pop(context);
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(e.toString())),
+                    );
+                  } finally {
+                    setState(() => isLoading = false);
+                  }
+                },
+                child: customButton2(child: isLoading
+                    ? CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 0.8,
+                )
+                    : customText("Save Changes", color: Colors.white)))
           ],
         ),
       ),

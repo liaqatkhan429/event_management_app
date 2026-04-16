@@ -1,4 +1,5 @@
 
+import 'package:event_management_app/provider/user.dart';
 import 'package:event_management_app/views/update_profile.dart';
 import 'package:event_management_app/views/utils/appbutton.dart';
 import 'package:event_management_app/widgets/resuble_widgets.dart' hide customText, buttonColor;
@@ -31,6 +32,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xffF8F8F8),
       body: SafeArea(
@@ -52,20 +54,20 @@ class _SettingScreenState extends State<SettingScreen> {
                 alignment: Alignment.center,
                 child: Column(
                   children: [
-                    const CircleAvatar(
+                     CircleAvatar(
                       radius: 42,
-                      backgroundImage: AssetImage('assets/p.png'),
+                      backgroundImage: NetworkImage(userProvider.getUser().profileImage.toString())
                     ),
                     const SizedBox(height: 14),
                     customText(
-                      "Morgan Mill",
+                      userProvider.getUser().userName.toString(),
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
                       ),
 
                     const SizedBox(height: 4),
                     customText(
-                      "example23@gmail.com",
+                      userProvider.getUser().email.toString(),
                         fontSize: 14,
                         color: Colors.grey.shade600,
                     ),
