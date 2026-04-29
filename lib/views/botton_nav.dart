@@ -2,7 +2,6 @@
 
 
 import 'package:event_management_app/views/admin_community_screen.dart';
-import 'package:event_management_app/views/community_screen.dart';
 import 'package:event_management_app/views/home_screen.dart';
 import 'package:event_management_app/views/sitting.dart';
 import 'package:flutter/material.dart';
@@ -40,9 +39,14 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         ),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          unselectedItemColor: Color(0xff555555),
-          selectedItemColor: Colors.black,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          selectedItemColor: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white
+              : Colors.black,
+
+          unselectedItemColor: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white70
+              : const Color(0xFF555555),
           showSelectedLabels: true,
           showUnselectedLabels: true,
           selectedLabelStyle: GoogleFonts.poppins(
@@ -90,14 +94,18 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     );
   }
 
-  // Helper method for bottom nav items with color-changing icons
+
   BottomNavigationBarItem _buildNavItem(String assetPath, String label, int index) {
     return BottomNavigationBarItem(
       icon: Image.asset(
         assetPath,
         width: 28,
         height: 28,
-        color: selectedIndex == index ? const Color(0xffCF3232) : const Color(0xFF555555),
+        color: selectedIndex == index
+            ? const Color(0xffCF3232)
+
+
+            : const Color(0xFF555555),
       ),
       label: label,
     );

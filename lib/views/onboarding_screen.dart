@@ -1,5 +1,5 @@
 // import 'package:event_management_app/views/login_view.dart';
-// import 'package:event_management_app/widgets/resuble_widgets.dart';
+// import 'package:event_management_app/widgets/reuseble_widgets.dart';
 // import 'package:flutter/material.dart';
 // import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 //

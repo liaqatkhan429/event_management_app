@@ -1,3 +1,4 @@
+import 'package:event_management_app/provider/calender.dart';
 import 'package:event_management_app/provider/theme.dart';
 import 'package:event_management_app/provider/user.dart';
 import 'package:event_management_app/views/splash_view.dart';
@@ -9,12 +10,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
+
   runApp(
     MultiProvider(
 
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => CalendarProvider()),
       ],
         child: const MyApp()),
   );

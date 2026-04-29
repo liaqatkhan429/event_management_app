@@ -11,7 +11,7 @@ import '../provider/user.dart';
 import '../services/cloudinary.dart';
 import '../services/image_picker.dart';
 import '../services/user.dart';
-import '../widgets/resuble_widgets.dart';
+import '../widgets/reuseble_widgets.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -23,6 +23,8 @@ class UpdateProfileScreen extends StatefulWidget {
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   TextEditingController nameController = TextEditingController();
   bool isLoading = false;
+  bool isUploading = false;
+
 
   String? profileImageUrl;
 
@@ -37,7 +39,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     var userProvider = Provider.of<UserProvider>(context, listen: false);
 
     nameController = TextEditingController(
-      text: userProvider.getUser().userName.toString(),
+      text: userProvider.getUser().userName ?? "User",
     );
 
     super.initState();
@@ -46,20 +48,29 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   Widget build(BuildContext context) {
     var userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black12
+          : Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? Colors.black12
+            : Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon:  Icon(Icons.arrow_back,   color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white
+              : Colors.black,),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          'Edit Detail',
+        title: Text(
+          'Edit Details',
           style: TextStyle(
-            color: Colors.black,
+
             fontWeight: FontWeight.bold,
             fontSize: 18,
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.white
+                : Colors.black,
           ),
         ),
       ),
@@ -74,10 +85,21 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             Center(
               child: Stack(
                 children: [
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundImage: NetworkImage(
-                      userProvider.getUser().profileImage.toString()
+                  Container(
+                    height: 142,
+                    width: 142,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black12.withValues(alpha: 0.1),
+                          width: 2,
+                        ),
+                        image: DecorationImage(
+                          image: userProvider.getUser().profileImage != null
+                              ? NetworkImage(userProvider.getUser().profileImage!)
+                              : const AssetImage("assets/user2.png") as ImageProvider,
+                          fit: BoxFit.cover,
+                        )
                     ),
                   ),
                   Positioned(
@@ -93,16 +115,29 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       },
                       child: Container(
                         padding: const EdgeInsets.all(8),
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: Colors.black,
                           shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 2,
+                          ),
                         ),
-                        child: const Icon(
+                        child: isUploading
+                            ? const SizedBox(
+                          height: 18,
+                          width: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 0.6,
+                            color: Colors.white,
+                          ),
+                        )
+                            : const Icon(
                           Icons.camera_alt,
                           color: Colors.white,
                           size: 20,
                         ),
-                      ),
+                      )
                     ),
                   ),
                 ],
@@ -112,12 +147,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             const SizedBox(height: 40),
 
             // Username Label
-            const Text(
+             Text(
               'Username',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
               ),
             ),
             const SizedBox(height: 12),
@@ -241,12 +278,16 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   /// Upload to Cloudinary & save URL in Firestore
   Future<void> uploadImageFile(File imageFile) async {
 
+    setState(() {
+      isUploading = true;
+    });
     String? url = await _cloudinaryService.uploadImage(imageFile);
 
     if (url != null) {
       /// 1️ Local state update (instant preview)
       setState(() {
         profileImageUrl = url;
+        isUploading = false;
       });
 
       ///  Firestore update
@@ -260,10 +301,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       ///  Provider refresh (IMPORTANT)
       UserModel updatedUser = await _userServices.getUserProfile(userId);
       Provider.of<UserProvider>(context, listen: false).setUser(updatedUser);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Profile picture updated")),
-      );
+      showSnackBar(context, "Profile Image Updated");
     }
   }
 

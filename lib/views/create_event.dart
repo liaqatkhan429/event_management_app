@@ -1,13 +1,13 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app/services/event.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../model/event.dart';
 import '../services/cloudinary.dart';
 import '../services/image_picker.dart';
-import '../widgets/resuble_widgets.dart';
+import '../widgets/reuseble_widgets.dart';
 
 class CreateEventScreen extends StatefulWidget {
   const CreateEventScreen({super.key});
@@ -23,9 +23,23 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   TextEditingController eventDetailsController = TextEditingController();
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
+
+// combine
+  late DateTime finalDateTime = DateTime(
+    selectedDate!.year,
+    selectedDate!.month,
+    selectedDate!.day,
+    selectedTime!.hour,
+    selectedTime!.minute,
+  );
+
   String? imageUrl;
   final CloudinaryService _cloudinaryService = CloudinaryService();
   final ImagePickerService _imagePicker = ImagePickerService();
+  bool isUploading = false;
+  bool isLoading = false;
+  bool isUploaded = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +59,9 @@ body: Padding(
                 "assets/backarrow.png",
                 height: 24,
                 width: 24,
-                color: Colors.black,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
               ),
             ),
             const SizedBox(width: 10),
@@ -53,6 +69,9 @@ body: Padding(
               "Create Event",
               fontWeight: FontWeight.w600,
               fontSize: 18,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
             ),
           ],
         ),
@@ -65,29 +84,14 @@ body: Padding(
               "Title",
               fontWeight: FontWeight.w500,
               fontSize: 14,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
             ),
             const SizedBox(height: 6),
-            TextField(
-              controller: titleController,
-              decoration: InputDecoration(
-                hintText: "Made in Melanin! Black History Month Social",
-                hintStyle: GoogleFonts.poppins(
-                    fontSize: 14,fontWeight: FontWeight.w400,color: Color(0xff505050)
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.black12),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.black),
-                ),
-              ),
-            ),
+            CustomTextFormField(
+                controller: titleController,
+                hintText: "Title"),
             const SizedBox(height: 24),
             Row(
               children: [
@@ -98,6 +102,9 @@ body: Padding(
                       "Date",
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
                     ),
                     Container(
                         width: 148,
@@ -143,6 +150,9 @@ body: Padding(
                       "Time",
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
                     ),
                     Container(
                       width: 148,
@@ -187,71 +197,44 @@ body: Padding(
               "Location",
               fontWeight: FontWeight.w500,
               fontSize: 14,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
             ),
             const SizedBox(height: 6),
-            TextField(
-              controller: locationController,
-              decoration: InputDecoration(
-                hintText: "1901 Thornridge Cir. Shiloh, Hawaii 81063",
-                hintStyle: GoogleFonts.poppins(
-                    fontSize: 14,fontWeight: FontWeight.w400,color: Color(0xff505050)
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.black12),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.black),
-                ),
-              ),
-            ),
+            CustomTextFormField(
+                controller: locationController,
+                hintText: "Location"),
 
             const SizedBox(height: 24),
             customText(
               "Event Detail",
               fontWeight: FontWeight.w500,
               fontSize: 14,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
             ),
             const SizedBox(height: 6),
-            TextField(
-              controller: eventDetailsController,
-              maxLines: 4,
-              decoration: InputDecoration(
-                hintText: "Lorem ipsum dolor sit amet consectetur. Lectus viverra fermentum natoque nibh enim aliquam tincidunt eu purus. Non habitasse sed feugiat aliquet tortor. Risus turpis quam est quam leo turpis ipsum. Amet non sed lacus placerat turpis in. Vitae amet sit sed dictum eget scelerisque massa nibh.",
-                hintStyle: GoogleFonts.poppins(
-                    fontSize: 14,fontWeight: FontWeight.w400,color: Color(0xff505050)
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.black12),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.black),
-                ),
-              ),
+            CustomTextFormField(
+                controller: eventDetailsController,
+                hintText: "Event Details",
+            maxLines: 4,
             ),
             const SizedBox(height: 24),
             customText(
               "Upload Image",
               fontWeight: FontWeight.w500,
               fontSize: 14,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
             ),
             const SizedBox(height: 6),
             InkWell(
               onTap: (){
                 try {
                   pickAndUploadImage();
-                  showSnackBar(context, "Image Uploaded");
                 }catch(e){
                   showSnackBar(context, e.toString());
                 }
@@ -268,11 +251,21 @@ body: Padding(
                 ),
                 child: Column(
                   children: [
-                    const SizedBox(height: 27),
-                    Image.asset("assets/upload.png"),
+                    const SizedBox(height: 15),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: isUploading
+                          ? const CircularProgressIndicator(
+                          color: Color(0xff505050),
+                        strokeWidth: 0.8,
+                      )
+                          : isUploaded
+                          ? const Icon(Icons.check, size: 55, color: Colors.green)
+                          : Image.asset("assets/upload.png"),
+                    ),
                     const SizedBox(height: 10),
                     customText(
-                      "Upload",
+                       "Upload",
                       fontWeight: FontWeight.w500,
                       fontSize: 18,
                       color: Color(0xff555555)
@@ -298,26 +291,40 @@ body: Padding(
                     return ;
                   }
                   try{
+                    isLoading = true;
+                    setState(() {});
                     EventServices().createEvent(
                         EventModel(
                           title: titleController.text,
-                          date: selectedDate.toString(),
-                          time: selectedTime.toString(),
+                          dateTime: Timestamp.fromDate(finalDateTime),
                           location: locationController.text,
                           eventDetails: eventDetailsController.text,
                           image: imageUrl,
                           createAt: DateTime.now().millisecondsSinceEpoch,
                         ),
                     ).then((val){
+                      isLoading = false;
+                      setState(() {});
                       showSnackBar(context, "Event Created Successfully");
                       Navigator.pop(context);
                     }
                     );
                   }catch(e){
+                    isLoading = false;
+                    setState(() {});
                     showSnackBar(context, e.toString());
                   }
                 },
-                child: customButton(text: "Create Event")),
+                child: customButton2(
+                    width: 392, height: 56,
+                    child: isLoading
+                        ? CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 0.8,
+                    )
+                        : customText("Create Event", color: Colors.white)
+                ),
+            ),
             const SizedBox(height: 24),
 
           ],
@@ -404,13 +411,24 @@ body: Padding(
 
   /// Upload to Cloudinary & save URL in Firestore
   Future<void> uploadImageFile(File imageFile) async {
+    setState(() {
+      isUploading = true;
+      isUploaded = false;
+    });
 
     String? url = await _cloudinaryService.uploadImage(imageFile);
 
     if (url != null) {
-      /// 1️ Local state update (instant preview)
       setState(() {
         imageUrl = url;
+        isUploading = false;
+        isUploaded = true;
+        showSnackBar(context, "Image Uploaded");
+      });
+    } else {
+      setState(() {
+        isUploading = false;
+        isUploaded = false;
       });
     }
   }

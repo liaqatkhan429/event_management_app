@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../widgets/resuble_widgets.dart';
+import '../widgets/reuseble_widgets.dart';
 import 'login_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -37,6 +37,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       'image': 'assets/pageview3.png',
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+   // subscribeUser();
+  }
+
+  // void subscribeUser() async {
+  //   await FirebaseMessaging.instance.subscribeToTopic("events");
+  //   print("subscribed to topic");
+  //}
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +121,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                      onboardingData[index]['title']!,
                         fontWeight: FontWeight.w700,
                         fontSize: 32,
-                        spacing: -1
+                        spacing: -1,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black,
                       ),
                           const SizedBox(height: 16),
 

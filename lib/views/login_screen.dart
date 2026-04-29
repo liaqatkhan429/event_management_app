@@ -1,13 +1,12 @@
 
 import 'package:event_management_app/provider/user.dart';
-import 'package:event_management_app/views/utils/appbutton.dart';
-import 'package:event_management_app/widgets/resuble_widgets.dart' hide customText;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../services/auth.dart';
 import '../services/user.dart';
+import '../widgets/reuseble_widgets.dart';
 import 'botton_nav.dart';
 import 'create_account.dart';
 
@@ -22,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  bool _obscureText = true;
+  bool _obscureText = false;
   bool isLoading = false;
 
   @override
@@ -56,7 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     " To Your Account",
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
-                      color: blackColor,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        :  blackColor,
 
                   ),
                 ],
@@ -75,10 +76,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: customText(
-                      "Phone number",
+                      "Email",
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
 
                     ),
                   ),
@@ -116,7 +119,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   "Password",
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
 
                 ),
               ),
@@ -170,7 +175,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: GoogleFonts.poppins(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF1E1E1E),
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              :  Color(0xFF1E1E1E),
                           textStyle: TextStyle(
                             decoration: TextDecoration.underline,
                           ),
@@ -199,7 +206,9 @@ class _LoginScreenState extends State<LoginScreen> {
                        setState(() {});
                        await UserServices().getUserProfile(val.uid).then((userData){
                          userProvider.setUser(userData);
+                         showSnackBar(context, "Login Success");
                          Navigator.push(context, MaterialPageRoute(builder: (context) => BottomNavigationScreen()));
+
                        });
                      });
                    }
@@ -225,7 +234,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 alignment: Alignment.center,
                 child: customText(
                   "OR",
-                  fontSize: 16, fontWeight: FontWeight.w600),
+                  fontSize: 16, fontWeight: FontWeight.w600,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
+                ),
               ),
 
               SizedBox(height: 30),
@@ -236,7 +249,8 @@ class _LoginScreenState extends State<LoginScreen> {
                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                children: [
                  Image.asset("assets/google.png",height: 36,width: 36),
-                 customText("Continue with google", fontWeight: FontWeight.w500,fontSize: 14, color: Color(0xff505050))
+                 customText("Continue with google", fontWeight: FontWeight.w500,fontSize: 14,
+                     color: Color(0xff505050))
                ],
              )),
               SizedBox(height: 62),
@@ -248,6 +262,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
                     ),
 
                   TextButton(

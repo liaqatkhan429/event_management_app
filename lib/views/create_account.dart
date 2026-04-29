@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../model/user.dart';
 import '../services/auth.dart';
 import '../services/user.dart';
-import '../widgets/resuble_widgets.dart';
+import '../widgets/reuseble_widgets.dart';
 import 'login_screen.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -49,11 +49,14 @@ class _CreateAccountState extends State<CreateAccount> {
                       color: Colors.redAccent,
 
                     ),
+                    const SizedBox(width: 5,),
                     customText(
                       "Account",
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
-                      color: blackColor,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : blackColor,
 
                     ),
                   ],
@@ -72,10 +75,12 @@ class _CreateAccountState extends State<CreateAccount> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: customText(
-                    "Gmail",
+                    "Email",
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
 
                   ),
                 ),
@@ -114,7 +119,9 @@ class _CreateAccountState extends State<CreateAccount> {
                     "Password",
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
 
                   ),
                 ),
@@ -164,7 +171,9 @@ class _CreateAccountState extends State<CreateAccount> {
                     "Confirm Password",
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
 
                   ),
                 ),
@@ -234,6 +243,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         ).then((val){
                           isLoading = false;
                           setState(() {});
+                          showSnackBar(context, "Account Created Successfully");
                           Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
                         });
                       });
@@ -260,7 +270,11 @@ class _CreateAccountState extends State<CreateAccount> {
                   alignment: Alignment.center,
                   child: customText(
                       "OR",
-                      fontSize: 16, fontWeight: FontWeight.w600),
+                      fontSize: 16, fontWeight: FontWeight.w600,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                  ),
                 ),
 
                 SizedBox(height: 30),
@@ -284,6 +298,9 @@ class _CreateAccountState extends State<CreateAccount> {
 
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
                     ),
 
                     TextButton(
